@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "457014863495",
+    "project_id": "ecl-punchin",
+    "storage_bucket": "ecl-punchin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457014863495:android:8d2e42fb30541ad8ab3a22",
+        "android_client_info": {
+          "package_name": "com.example.ecl_punchin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb1jllxFy6zCQMJBwcYFyMxsG1lhoOMNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,26 @@
+class PunchingOutModel {
+  String? locationName;
+  String? longitude;
+  String? latitude;
+  String? punchInNotes;
+  String? punchOutNotes;
+  String? picture;
+  int? userId;
+  int? id;
+
+  PunchingOutModel({this.locationName, this.longitude, this.latitude, this.punchInNotes, this.picture, this.userId, this.id, this.punchOutNotes});
+
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['locationName'] = this.locationName;
+    data['longitude'] = this.longitude;
+    data['latitude'] = this.latitude;
+    data['punchInNotes'] = this.punchInNotes;
+    data['punchOutNotes'] = this.punchOutNotes;
+    data['picture'] = this.picture;
+    data['userId'] = this.userId;
+    data['id'] = this.id;
+    return data;
+  }
+}
