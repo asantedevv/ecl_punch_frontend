@@ -12,6 +12,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,6 +29,8 @@ class _PunchInState extends State<PunchIn> {
   String? currentAddress;
   String? notes;
   User? user;
+  String? punchInTime;
+  String? punchTime;
   PunchCardModel? punchCardModel;
   List<User> restaurant = [];
 
@@ -43,6 +46,22 @@ class _PunchInState extends State<PunchIn> {
   String base64String = "";
   bool isPunchedIn = false;
   XFile? _pickedFile;
+
+  String _extractTime(String? punchInTime) {
+    if (punchInTime == null) return 'N/A';
+    try {
+      DateTime parsedTime = DateTime.parse(punchInTime);
+      Logger().d("hereeeeeeeeeeeeeeeeeeeee");
+      Logger().d(DateFormat('HH:mm:ss').format(parsedTime));
+
+      setState(() {
+        punchTime = DateFormat('HH:mm:ss').format(parsedTime);
+      });
+      return DateFormat('HH:mm:ss').format(parsedTime); // Format as HH:mm:ss
+    } catch (e) {
+      return 'Invalid Time';
+    }
+  }
 
   Future _pickImageFromCamera() async {
     final returnedImage =
@@ -113,7 +132,7 @@ class _PunchInState extends State<PunchIn> {
     Logger().d(userId);
 
     var uri = Uri.parse(
-        "https://57a2-196-61-37-18.ngrok-free.app/api/v1/user/find-by-id/$userId");
+        "https://1d11-196-61-37-18.ngrok-free.app/api/v1/user/find-by-id/$userId");
 
     Logger().d("Finding User 2");
 
@@ -164,7 +183,7 @@ class _PunchInState extends State<PunchIn> {
     String? foundToken = prefs.getString('token');
 
     var uri = Uri.parse(
-        "https://57a2-196-61-37-18.ngrok-free.app/api/v1/punchcard/create");
+        "https://1d11-196-61-37-18.ngrok-free.app/api/v1/punchcard/create");
 
     Map<String, String> header = {
       "Content-Type": "application/json",
@@ -187,14 +206,29 @@ class _PunchInState extends State<PunchIn> {
     Logger().d(jsonResponse);
 
     var punchData = jsonResponse['data'];
+    Logger().d(jsonResponse['data']);
+
+    String newPunchInTime = punchData['punchInDateTime'];
 
     await prefs.setInt('punchId', punchData['id']);
-
-    int? punchId = prefs.getInt('punchId');
+    await prefs.setString('punchInTime', punchData['punchInDateTime']);
 
     Logger().d("punchId is here");
-
+    int? punchId = prefs.getInt('punchId');
     Logger().d(punchId);
+
+    Logger().d("punchInTime is here");
+    String? punchInTimes = prefs.getString('punchInTime');
+    Logger().d(punchInTimes);
+    Logger().d(punchData['punchInDateTime']);
+    Logger().d(punchData['id']);
+    Logger().d(newPunchInTime);
+
+    _extractTime(prefs.getString('punchInTime'));
+
+    setState(() {
+      punchInTime = prefs.getString('punchInTime');
+    });
 
     retrieveUserById();
   }
@@ -207,7 +241,7 @@ class _PunchInState extends State<PunchIn> {
     String? foundToken = prefs.getString('token');
 
     var uri = Uri.parse(
-        "https://57a2-196-61-37-18.ngrok-free.app/api/v1/punchcard/punchOut");
+        "https://1d11-196-61-37-18.ngrok-free.app/api/v1/punchcard/punchOut");
 
     Map<String, String> header = {
       "Content-Type": "application/json",
@@ -344,11 +378,11 @@ class _PunchInState extends State<PunchIn> {
                         border: Border.all(color: Colors.black),
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: const Padding(
+                      child: Padding(
                         padding:
                             EdgeInsets.symmetric(vertical: 13, horizontal: 12),
                         child: Text(
-                          "You punched in at 09:11",
+                          "You punched in at $punchTime",
                           style: TextStyle(fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         ),
