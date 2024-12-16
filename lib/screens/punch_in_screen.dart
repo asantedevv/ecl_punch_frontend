@@ -24,7 +24,6 @@ class PunchIn extends StatefulWidget {
 }
 
 class _PunchInState extends State<PunchIn> {
-
   bool isPunchLoading = false;
   double? currentlatitude;
   double? currentlongitude;
@@ -125,11 +124,10 @@ class _PunchInState extends State<PunchIn> {
   }
 
   Future<void> retrieveUserById() async {
-    
     Logger().d("Finding User 1");
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    
+
     _extractTime(prefs.getString('punchInTime'));
     int? userId = prefs.getInt('userId');
     String? foundToken = prefs.getString('token');
@@ -138,7 +136,7 @@ class _PunchInState extends State<PunchIn> {
     Logger().d(userId);
 
     var uri = Uri.parse(
-        "https://65b1-154-161-178-71.ngrok-free.app/api/v1/user/find-by-id/$userId");
+        "https://9bba-41-66-243-226.ngrok-free.app/api/v1/user/find-by-id/$userId");
 
     Logger().d("Finding User 2");
 
@@ -185,7 +183,7 @@ class _PunchInState extends State<PunchIn> {
     Logger().d("Punching In");
 
     setState(() {
-      isPunchLoading = true; 
+      isPunchLoading = true;
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -193,7 +191,7 @@ class _PunchInState extends State<PunchIn> {
     String? foundToken = prefs.getString('token');
 
     var uri = Uri.parse(
-        "https://65b1-154-161-178-71.ngrok-free.app/api/v1/punchcard/create");
+        "https://9bba-41-66-243-226.ngrok-free.app/api/v1/punchcard/create");
 
     Map<String, String> header = {
       "Content-Type": "application/json",
@@ -240,7 +238,8 @@ class _PunchInState extends State<PunchIn> {
 
     _extractTime(prefs.getString('punchInTime'));
 
-    await prefs.setString('timeOfPunchIn', _extractTime(prefs.getString('punchInTime')));
+    await prefs.setString(
+        'timeOfPunchIn', _extractTime(prefs.getString('punchInTime')));
 
     setState(() {
       punchInTime = prefs.getString('punchInTime');
@@ -253,7 +252,6 @@ class _PunchInState extends State<PunchIn> {
   }
 
   Future<void> userPunchingOut(PunchingOutModel punchOut) async {
-
     setState(() {
       isPunchLoading = true;
     });
@@ -266,7 +264,7 @@ class _PunchInState extends State<PunchIn> {
     Logger().d("Punching Out");
 
     var uri = Uri.parse(
-        "https://65b1-154-161-178-71.ngrok-free.app/api/v1/punchcard/punchOut");
+        "https://9bba-41-66-243-226.ngrok-free.app/api/v1/punchcard/punchOut");
 
     Map<String, String> header = {
       "Content-Type": "application/json",
@@ -461,30 +459,37 @@ class _PunchInState extends State<PunchIn> {
                                   isPunchLoading = true;
                                 });
 
-                                PunchingInModel punchingInModel = PunchingInModel(
+                                PunchingInModel punchingInModel =
+                                    PunchingInModel(
                                   locationName: currentAddress,
                                   longitude: '$currentlongitude',
                                   latitude: '$currentlatitude',
-                                  punchInNotes: notesTextEdittingController.text,
+                                  punchInNotes:
+                                      notesTextEdittingController.text,
                                   picture: base64String,
                                 );
 
-                                PunchingOutModel punchingOutModel = PunchingOutModel(
+                                PunchingOutModel punchingOutModel =
+                                    PunchingOutModel(
                                   locationName: currentAddress,
                                   longitude: '$currentlongitude',
                                   latitude: '$currentlatitude',
-                                  punchOutNotes: notesTextEdittingController.text,
+                                  punchOutNotes:
+                                      notesTextEdittingController.text,
                                   picture: base64String,
                                 );
 
                                 if (status != "Punched Out") {
-                                  userPunchingOut(punchingOutModel); // Punch Out action
+                                  userPunchingOut(
+                                      punchingOutModel); // Punch Out action
                                 } else {
-                                  userPunchingIn(punchingInModel); // Punch In action
+                                  userPunchingIn(
+                                      punchingInModel); // Punch In action
                                 }
 
                                 setState(() {
-                                  isPunchedIn = !isPunchedIn; // Toggle the punch state
+                                  isPunchedIn =
+                                      !isPunchedIn; // Toggle the punch state
                                   isPunchLoading = false; // Reset loading state
                                 });
                               },
@@ -492,16 +497,19 @@ class _PunchInState extends State<PunchIn> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             isPunchLoading
-                                ? LoadingAnimationWidget.discreteCircle(color: Colors.white, size: 30)
+                                ? LoadingAnimationWidget.discreteCircle(
+                                    color: Colors.white, size: 30)
                                 : const SizedBox.shrink(),
                             const SizedBox(width: 10),
                             isPunchLoading
                                 ? const Text(
                                     'Processing...',
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: Colors.blue),
                                   )
                                 : Text(
-                                    status != "Punched Out" ? "Punch Out" : "Punch In",
+                                    status != "Punched Out"
+                                        ? "Punch Out"
+                                        : "Punch In",
                                     style: const TextStyle(
                                       fontSize: 17,
                                       color: Colors.white,
@@ -509,79 +517,102 @@ class _PunchInState extends State<PunchIn> {
                                   ),
                           ],
                         ),
-                      )               
-                      : ElevatedButton(
+                      )
+                    : ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           backgroundColor: const Color(0xFF2BBCE8),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14)),
                         ),
-                        onPressed: () {
-                          PunchingInModel punchingInModel = PunchingInModel(
-                            locationName: currentAddress,
-                            longitude: '$currentlongitude',
-                            latitude: '$currentlatitude',
-                            punchInNotes: notesTextEdittingController.text,
-                            picture: base64String,
-                          );
+                        onPressed: isPunchLoading
+                            ? null // Disable button if loading
+                            : () {
+                                setState(() {
+                                  isPunchLoading = true;
+                                });
 
-                          PunchingOutModel punchingOutModel = PunchingOutModel(
-                            locationName: currentAddress,
-                            longitude: '$currentlongitude',
-                            latitude: '$currentlatitude',
-                            punchOutNotes: notesTextEdittingController.text,
-                            picture: base64String,
-                          );
-                          // userPunchingOut(punchingOutModel);
-                          userPunchingIn(punchingInModel);
+                                PunchingInModel punchingInModel =
+                                    PunchingInModel(
+                                  locationName: currentAddress,
+                                  longitude: '$currentlongitude',
+                                  latitude: '$currentlatitude',
+                                  punchInNotes:
+                                      notesTextEdittingController.text,
+                                  picture: base64String,
+                                );
 
-                          // status != "Punched Out" ? userPunchingOut(punchingOutModel) :  userPunchingIn(punchingInModel);
+                                PunchingOutModel punchingOutModel =
+                                    PunchingOutModel(
+                                  locationName: currentAddress,
+                                  longitude: '$currentlongitude',
+                                  latitude: '$currentlatitude',
+                                  punchOutNotes:
+                                      notesTextEdittingController.text,
+                                  picture: base64String,
+                                );
+                                // userPunchingOut(punchingOutModel);
+                                userPunchingIn(punchingInModel);
 
-                          // getLocation();
-                          setState(() {
-                            isPunchedIn = !isPunchedIn;
-                          });
-                        },
+                                // status != "Punched Out" ? userPunchingOut(punchingOutModel) :  userPunchingIn(punchingInModel);
+
+                                // getLocation();
+                                setState(() {
+                                  isPunchedIn = !isPunchedIn;
+                                });
+                              },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              status != "Punched Out"
-                                  ? "Punch Out"
-                                  : "Punch In",
-                              style: const TextStyle(
-                                fontSize: 17,
-                                color: Colors.white,
-                              ),
-                            ),
+                            isPunchLoading
+                                ? LoadingAnimationWidget.discreteCircle(
+                                    color: Colors.white, size: 30)
+                                : const SizedBox.shrink(),
+                            const SizedBox(width: 10),
+                            isPunchLoading
+                                ? const Text(
+                                    'Processing...',
+                                    style: TextStyle(color: Colors.blue),
+                                  )
+                                : Text(
+                                    status != "Punched Out"
+                                        ? "Punch Out"
+                                        : "Punch In",
+                                    style: const TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ],
                         ),
                       )),
             const SizedBox(height: 25),
-            const Text("Punch In & Select Time",
-                style: TextStyle(fontSize: 15),),
-
-                if ( isPunchLoading)
-           Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  LoadingAnimationWidget.hexagonDots(
-                    color: const Color(0xFF2BBCE8),
-                    size: 50,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const Text(
-                    'Please wait while data is being fetched',
-                    style: TextStyle(color: Color(0xFF2BBCE8), fontSize: 15),
-                  ),
-                ],
-              ),
-            )
-          
+            const Text(
+              "Punch In & Select Time",
+              style: TextStyle(fontSize: 15),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            if (isPunchLoading)
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LoadingAnimationWidget.hexagonDots(
+                      color: const Color(0xFF2BBCE8),
+                      size: 50,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Loading...',
+                      style: TextStyle(color: Color(0xFF2BBCE8), fontSize: 15),
+                    ),
+                  ],
+                ),
+              )
           ],
         ),
       ),

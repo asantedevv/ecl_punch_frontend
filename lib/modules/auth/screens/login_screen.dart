@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<bool> authenticate(User user, BuildContext context) async {
     //create uri
     var uri = Uri.parse(
-        "https://65b1-154-161-178-71.ngrok-free.app/api/v1/auth/microsoft");
+        "https://9bba-41-66-243-226.ngrok-free.app/api/v1/auth/microsoft");
     //header
     Map<String, String> headers = {"Content-Type": "application/json"};
     //body
@@ -240,13 +240,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () => _loginWithMicrosoft(),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.asset('assets/images/microsoft8.png', width: 30, height: 30,),
-                                SizedBox(width: 10,),
+                                Image.asset(
+                                  'assets/images/microsoft8.png',
+                                  width: 30,
+                                  height: 30,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 const Text(
                                   'Log in with Microsoft',
-                                  style: TextStyle(color: Colors.white, fontSize: 15),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
                                 ),
                               ],
                             ),

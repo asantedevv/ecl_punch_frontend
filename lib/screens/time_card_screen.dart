@@ -34,7 +34,7 @@ class _TimeCardState extends State<TimeCard> {
     String? foundToken = prefs.getString('token');
 
     var uri = Uri.parse(
-        "https://65b1-154-161-178-71.ngrok-free.app/api/v1/punchcard/find-by-userId/$userId");
+        "https://9bba-41-66-243-226.ngrok-free.app/api/v1/punchcard/find-by-userId/$userId");
 
     Map<String, String> header = {
       "Content-Type": "application/json",
