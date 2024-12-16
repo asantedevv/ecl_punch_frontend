@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<bool> authenticate(User user, BuildContext context) async {
     //create uri
     var uri = Uri.parse(
-        "https://1d11-196-61-37-18.ngrok-free.app/api/v1/auth/microsoft");
+        "https://65b1-154-161-178-71.ngrok-free.app/api/v1/auth/microsoft");
     //header
     Map<String, String> headers = {"Content-Type": "application/json"};
     //body
@@ -122,6 +122,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
       var userId = data['id']; // Retrieve the 'id' field from 'data'
       var email = data['email'];
+      var fullName = data['fullName'];
+      var jobTitle = data['jobTitle'];
+      var mobilePhone = data['mobilePhone'];
       var password = data['password'];
 
       print("User ID: $userId");
@@ -129,10 +132,13 @@ class _LoginScreenState extends State<LoginScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setInt('userId', userId);
       await prefs.setString('email', email);
+      await prefs.setString('fullName', fullName);
+      await prefs.setString('jobTitle', jobTitle);
+      await prefs.setString('mobilePhone', mobilePhone);
       await prefs.setString('token', token);
 
       print(parsedJson['responseCode']);
-      print("BODY CONTAINS DATA");
+      Logger().d("BODY CONTAINS DATA");
       print(parsedJson);
       // print("${response.body.data}");
 
@@ -228,20 +234,28 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: PopScope(
                       // canPop: false,
-                      child: ElevatedButton(
-                        onPressed: () => _loginWithMicrosoft(),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 70, vertical: 15),
-                          child: Text(
-                            'Log in with Microsoft',
-                            style: TextStyle(color: Colors.white, fontSize: 15),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ElevatedButton(
+                          onPressed: () => _loginWithMicrosoft(),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/images/microsoft8.png', width: 30, height: 30,),
+                                SizedBox(width: 10,),
+                                const Text(
+                                  'Log in with Microsoft',
+                                  style: TextStyle(color: Colors.white, fontSize: 15),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white.withOpacity(0.3),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white.withOpacity(0.3),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
                         ),
                       ),
